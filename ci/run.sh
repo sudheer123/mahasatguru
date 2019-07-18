@@ -2,7 +2,7 @@
 
 set -eu  
 
-export fly_target=${fly_target:-storage-auctions}
+export fly_target=${fly_target:-maha-satguru}
 echo "Concourse API target ${fly_target}"
   
 fly -t ${fly_target} validate-pipeline --config pipeline.yml
