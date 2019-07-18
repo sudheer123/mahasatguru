@@ -1,0 +1,44 @@
+groups:
+  - name: Prod
+    jobs: 
+     - job-deploy-prod
+
+resources:
+- name: maha-develop
+  type: git
+  source: &git-repo 
+    uri: ((git_url))
+    username: ((username))
+    password: ((password))
+    branch: master
+
+jobs:
+  - name: job-deploy-prod
+    public: true
+    serial: true
+    plan:
+      - get: mahasatguru-test
+        resource: maha-develop
+        trigger: true
+      - task: deploy-prod
+        config:
+            platform: linux
+
+            image_resource:
+                type: docker-image
+                source: {repository: ubuntu}
+
+            inputs:
+                    - name: mahasatguru-test
+                      path: mahasatguru-test
+
+            run:
+                    path: sh
+                    args:
+                        - -c
+                        - |
+                            apt-get update -y 
+                            apt-get install openssh-server -y
+        
+     
+
